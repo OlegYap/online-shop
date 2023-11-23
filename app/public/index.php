@@ -1,3 +1,70 @@
+<?php
+
+
+
+function validate(array $data)
+{
+    $errors = [];
+    if (isset($data['name']))
+    {
+        $name = $data['name'];
+        if (strlen($name) < 2) {
+            $errors['name'] = 'Имя должно содержать больше двух букв';
+        }
+    } else {
+        $errors['name'] = 'Введите имя';
+    }
+
+    if (isset($data['email']))
+    {
+        $email = $data['email'];
+        if (strlen($email) < 4) {
+            $errors['email'] = 'Электронная почта должна содержать больше 4 символов';
+        } elseif (!strpos($email,'@')) {
+            $errors['email'] = 'Некорректный формат почты';
+        }
+    } else {
+        $errors['email'] = 'Введите email';
+    }
+
+    if (isset($data['psw-repeat'])) {
+        $password = $data['psw'];
+        $passwordR = $data['psw-repeat'];
+        if ($password !== $passwordR) {
+            $errors['psw'] = 'Пароль должен содержать больше 6 символов';
+        }
+    } else {
+        $errors['psw'] = 'Введите пароль';
+    }
+
+    return $errors;
+}
+
+$errors = validate($_POST);
+
+
+if (empty($errors))
+{
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['psw'];
+
+
+    $pdo = new PDO("pgsql:host=db;dbname=postgres","dbuser","dbpwd");
+
+    $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+    $stmt->execute(['name' => $name,  'email' => $email, 'password' => $password]);
+
+    $stmt = $pdo->prepare('SELECT * FROM users');
+    $stmt->execute();
+    $data= $stmt ->fetchAll();
+
+    print_r($data);
+}
+?>
+
+
+
 <form action="register_handler.php" method="POST" >
     <div class="container">
         <h1>Register</h1>
@@ -5,15 +72,27 @@
         <hr>
 
         <label for="name"><b>Name</b></label>
+        <?php if (isset($errors['name'])): ?>
+            <label style="color: red"v><?php echo $errors['name'];?></label>
+        <?php endif; ?>
         <input type="text" placeholder="Enter Name" name="name" id="name" required>
 
         <label for="email"><b>Email</b></label>
+        <?php if (isset($errors['email'])): ?>
+            <label style="color: red"><?php echo $errors['email'];?></label>
+        <?php endif; ?>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>
+        <?php if (isset($errors['psw'])): ?>
+            <label style="color: red"><?php echo $errors['psw']; ?></label>
+        <?php endif; ?>
         <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
+        <?php if (isset($errors['psw-repeat'])): ?>
+            <label style="color: red"><?php echo $errors['psw-repeat'];?></label>
+        <?php endif; ?>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>
 
@@ -82,6 +161,3 @@
         text-align: center;
     }
 </style>
-
-<?php
-echo "Hello World!";
