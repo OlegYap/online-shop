@@ -1,39 +1,56 @@
 <?php
-$errors = [];
-
 $requestMethod = $_SERVER['REQUEST_METHOD'];
+
 if ($requestMethod === 'POST') {
-    $login = $_POST['login'];
-    $password = $_POST['password'];
-
-    if (empty($login)) {
-        $errors['login'] = 'Введите корректное имя';
-    }
-
-    if (empty($password)) {
-        $errors['password'] = 'Введите правильно пароль';
-    }
-}
-if (empty($errors)) {
-    $login = $_POST['login'];
-    $password = $_POST['password'];
-
-    $pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE email=:email');
-    $stmt->execute(['email' => $login]);
-
-    $data = $stmt->fetch();
-    if (empty($data)) {
-        $errors['login'] = 'Логин или пароль введен неверно';
-    } else {
-        if ($password === $data['password']) {
-            echo 'login ok!';
+    function validate($data)
+    {
+        $errors = [];
+        if (isset($data['email'])) {
+            $login = $data['email'];
+            if (empty($login)) {
+                $errors ['login'] = 'Заполните поле Login';
+            } elseif (!strpos($login, '@')) {
+                $errors['login'] = "Некорректный формат почты";
+            }
         } else {
+            $errors['login'] = 'Заполните поле Login';
+        }
+        if (isset($data['psw'])) {
+            $password = $data['psw'];
+            if (empty($password)) {
+                $errors['psw'] = 'Введите пароль';
+            }
+        } else {
+            $errors['psw'] = 'Введите пароль';
+        }
+        return $errors;
+    }
+
+    $errors = validate($_POST);
+
+    if (empty($errors)) {
+        $login = $_POST['email'];
+        $password = $_POST['psw'];
+
+        $pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email=:email');
+        $stmt->execute(['email' => $login]);
+
+        $data = $stmt->fetch();
+        if (empty($data)) {
             $errors['login'] = 'Логин или пароль введен неверно';
+        } else {
+            if ($password === $data['password']) {
+                //Выдаем уникальный идентификатор сессии
+                session_start();
+                $_SESSION['user_id'] = $data['id'];
+                header('location: /main.php');
+            } else {
+                $errors['login'] = 'Логин или пароль введен неверно';
+            }
         }
     }
 }
-
 ?>
 
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -45,14 +62,14 @@ if (empty($errors)) {
             <?php if (isset($errors['login'])): ?>
                 <label style="color: red"><?php echo $errors['login']; ?></label>
             <?php endif; ?>
-            <input type="text" placeholder="Username" name="login" required>
+            <input type="text" placeholder="login" name="email" required>
             <i class='bx bxs-user'></i>
         </div>
         <div class="input-box">
-            <?php if (isset($errors['password'])): ?>
-                <label style="color: red"><?php echo $errors['password']; ?></label>
+            <?php if (isset($errors['psw'])): ?>
+                <label style="color: red"><?php echo $errors['psw']; ?></label>
             <?php endif; ?>
-            <input type="password" placeholder="password" name="password" required>
+            <input type="password" placeholder="password" name="psw" required>
             <i class='bx bxs-lock-alt'></i>
         </div>
         <div class="remember-forgot">
