@@ -1,73 +1,4 @@
-<?php
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-if ($requestMethod === 'POST') {
-    function validate(array $data)
-    {
-        $errors = [];
-        if (isset($data['name']))
-        {
-            $name = $data['name'];
-            if (strlen($name) < 2) {
-                $errors['name'] = 'Имя должно содержать больше двух букв';
-            }
-        } else {
-            $errors['name'] = 'Введите имя';
-        }
-
-        if (isset($data['email']))
-        {
-            $email = $data['email'];
-            if (strlen($email) < 4) {
-                $errors['email'] = 'Электронная почта должна содержать больше 4 символов';
-            } elseif (!strpos($email,'@')) {
-                $errors['email'] = 'Некорректный формат почты';
-            }
-        } else {
-            $errors['email'] = 'Введите email';
-        }
-
-        if (isset($data['psw-repeat'])) {
-            $password = $data['psw'];
-            $passwordR = $data['psw-repeat'];
-            if ($password !== $passwordR) {
-                $errors['psw'] = 'Пароль должен содержать больше 6 символов';
-            }
-        } else {
-            $errors['psw'] = 'Введите пароль';
-        }
-
-        return $errors;
-    }
-
-    $errors = validate($_POST);
-
-
-    if (empty($errors))
-    {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = $_POST['psw'];
-
-
-        $pdo = new PDO("pgsql:host=db;dbname=postgres","dbuser","dbpwd");
-
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-        $stmt->execute(['name' => $name,  'email' => $email, 'password' => $password]);
-
-        $stmt = $pdo->prepare('SELECT * FROM users');
-        $stmt->execute();
-        $data= $stmt ->fetch();
-
-        print_r($data);
-    }
-
-}
-
-?>
-
-
-
-<form action="registrate.php" method="POST" >
+<form action="" method="POST" >
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
@@ -75,7 +6,7 @@ if ($requestMethod === 'POST') {
 
         <label for="name"><b>Name</b></label>
         <?php if (isset($errors['name'])): ?>
-            <label style="color: red"v><?php echo $errors['name'];?></label>
+            <label style="color: red"><?php echo $errors['name'];?></label>
         <?php endif; ?>
         <input type="text" placeholder="Enter Name" name="name" id="name" required>
 
@@ -98,15 +29,14 @@ if ($requestMethod === 'POST') {
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>
 
-        <p>By creating an account you agree to our <a href="/main.php">Terms & Privacy</a>.</p>
+        <p>By creating an account you agree to our <a href="/main">Terms & Privacy</a>.</p>
         <button type="submit" class="registerbtn">Register</button>
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="login.php">Sign in</a>.</p>
+        <p>Already have an account? <a href="/login">Sign in</a></p>
     </div>
 </form>
-
 <style>
     * {box-sizing: border-box}
 
