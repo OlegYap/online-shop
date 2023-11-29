@@ -3,18 +3,16 @@
     <form action="" method="POST">
         <h1>Add product to cart</h1>
         <div class="input-box">
-            <?php if (isset($errors['login'])): ?>
-                <label style="color: red"><?php echo $errors['login']; ?></label>
+            <?php if (isset($errors['product-id'])): ?>
+                <label style="color: red"><?php echo $errors['product-id']; ?></label>
             <?php endif; ?>
-            <input type="text" placeholder="Product id" name="product-id" required>
-            <i class='bx bxs-user'></i>
+            <input type="text" placeholder="product-id" name="product-id" required>
         </div>
         <div class="input-box">
-            <?php if (isset($errors['psw'])): ?>
-                <label style="color: red"><?php echo $errors['psw']; ?></label>
+            <?php if (isset($errors['quantity'])): ?>
+                <label style="color: red"><?php echo $errors['quantity']; ?></label>
             <?php endif; ?>
             <input type="text" placeholder="quantity" name="quantity" required>
-            <i class='bx bxs-lock-alt'></i>
         </div>
         <button type="submit" class="btn">add product to cart</button>
     </form>
