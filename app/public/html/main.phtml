@@ -2,28 +2,24 @@
     <h3>Catalog</h3>
     <div class="card-deck">
         <?php foreach ($products as $product): ?>
-        <form action="/add-product" method="POST">
-            <div class="card text-center">
-                <div class="card-header">
-                    Фрукты
-                    <a href="#">
+            <form action="/add-product" method="POST">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Фрукты
                         <img class="card-img-top" src='https://img.freepik.com/premium-photo/slices-of-fresh-banana-and-pieces-of-strawberries-with-mint-leaves-on-white-background_124507-38152.jpg' alt=''>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><?php echo $product['name']; ?> </p>
+                        <div class="text"><?php echo $product['description'];?></div>
                         <input type="text" placeholder="product-id" name="product-id" required hidden="" value="<?php echo $product['id'];?>">
                         <input type="text" placeholder="quantity" name="quantity" required>
-                        <div class="card-body">
-                            <p class="card-text"><?php echo $product['name']; ?> </p>
-                            <div class="text"><?php echo $product['description'];?>
-                                <a><h5 class="card-title"></h5></a>
-                                <div class="card-footer">
-                                    <?php echo $product['price'] . " rub"; ?>
-                                </div>
-                                <a href="/add-product">
-                                    <button class="btn">add to cart</button>
-                                </a>
-                    </a>
+                        <div class="card-footer">
+                            <?php echo $product['price'] . " rub"; ?>
+                        </div>
+                        <button class="btn">add to cart</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
         <?php endforeach; ?>
     </div>
 </div>

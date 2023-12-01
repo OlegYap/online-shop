@@ -60,6 +60,7 @@ if ($requestMethod === 'POST') {
 
         header('location: /login');
     }
+    require_once './html/registrate.phtml';
 
 }
 
