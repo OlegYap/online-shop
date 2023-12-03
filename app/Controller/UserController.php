@@ -2,20 +2,20 @@
 
 class UserController
 {
-    public function registrate(): void
+    public function registrate(array $requestData): void
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         if ($requestMethod === 'POST') {
-            $errors =$this->validateRegistrate($_POST);
+            $errors =$this->validateRegistrate($requestData);
 
             if (empty($errors)) {
-                $name = $_POST['name'];
-                $email = $_POST['email'];
-                $password = $_POST['psw'];
+                $name = $requestData['name'];
+                $email = $requestData['email'];
+                $password = $requestData['psw'];
 
                 require_once '../Model/User.php';
 
-                $pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
+                //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
                 /*$stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
                 $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);*/
@@ -70,16 +70,16 @@ class UserController
 
         return $errors;
     }
-    public function login(): void
+    public function login(array $requestData): void
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         if ($requestMethod === 'POST')
         {
-            $errors = $this->validateLogin($_POST);
+            $errors = $this->validateLogin($requestData);
 
             if (empty($errors)) {
-                $login = $_POST['email'];
-                $password = $_POST['psw'];
+                $login = $requestData['email'];
+                $password = $requestData['psw'];
 
                 require_once '../Model/User.php';
 

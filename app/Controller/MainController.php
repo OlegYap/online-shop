@@ -1,5 +1,4 @@
 <?php
-
 class MainController
 {
     public function MainPage(): void
