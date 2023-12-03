@@ -1,7 +1,7 @@
 <?php
 class CartController
 {
-    public function addProduct()
+    public function addProduct(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors =$this->validateAddProduct($_POST);
@@ -13,14 +13,21 @@ class CartController
                 if (isset($_SESSION['user_id'])) {
                     $userId = $_SESSION['user_id'];
 
+                    require_once '../Model/Cart.php';
+
+
                     $pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
                     $cartModel = new Cart();
                     $cart = $cartModel->getOne($userId);
 
                     if (empty($cart)) {
-                        $stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
-                        $stmt->execute(['name' => 'cart', 'id' => $userId]);
+                        /*$stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
+                        $stmt->execute(['name' => 'cart', 'id' => $userId]);*/
+
+                        $cartModel = new Cart();
+                        $cart = $cartModel->create($userId);
+
 
                         $cartModel = new Cart();
                         $cart = $cartModel->getOne($userId);
@@ -31,7 +38,12 @@ class CartController
                     }
                     $cartId = $cart['id'];
 
-                    $cartModel->create($userId);
+                    require_once '../Model/CartProduct.php';
+
+
+                    $cartProductModel = new CartProduct();
+                    $cartProductModel->create($cartId, $productId, $quantity);
+
                     //$stmt = $pdo->prepare(query: 'INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)');
                     //$stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
                     header('location: /main');
@@ -40,7 +52,7 @@ class CartController
             }
         }
     }
-    private function validateAddProduct(array $data)
+    private function validateAddProduct(array $data): array
     {
         $errors = [];
         if (isset($data['email'])) {

@@ -14,6 +14,6 @@ if (isset($_SESSION['user_id'])){
     header('Location: /login');
 }
 
-require_once './html/main.phtml';
+require_once './View/main.phtml';
 
 

@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Cart
 {
     public function getOne(int $userId): array
@@ -13,11 +11,10 @@ class Cart
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create(int $userId):
+    public function create(int $userId): bool
     {
         $pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-
-        $stmt = $pdo->prepare(query: 'INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)');
-        $stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
+        $stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
+        return $stmt->execute(['name' => 'cart', 'id' => $userId]);
     }
 }
