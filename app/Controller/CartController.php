@@ -10,27 +10,29 @@ class CartController
                 $quantity = $requestData['quantity'];
 
                 session_start();
-                if (isset($_SESSION['user_id'])) {
-                    $userId = $_SESSION['user_id'];
+                if (isset($_SESSION->getUserId)) {
+                    $userId = $_SESSION->getUserId;
 
                     require_once '../Model/Cart.php';
 
 
                     //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
-                    $cartModel = new Cart();
-                    $cart = $cartModel->getOne($userId);
+                    $cartModel = new Cart($userId);
+                    $cart = Cart::getOneByUserId();
 
                     if (empty($cart)) {
                         /*$stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
                         $stmt->execute(['name' => 'cart', 'id' => $userId]);*/
 
-                        $cartModel = new Cart();
+                        $cartModel = new Cart($userId);
                         $cart = $cartModel->create($userId);
 
+                        //$data = Cart::getOneByUserId($userId);
 
-                        $cartModel = new Cart();
-                        $cart = $cartModel->getOne($userId);
+                        $cartModel = new Cart($userId);
+                        $cart = Cart::getOneByUserId($userId);
+                        //$cart = $cartModel->getOneByUserId($userId);
 
                         //$stmt = $pdo->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
                         //$stmt->execute(['userId' => $userId]);

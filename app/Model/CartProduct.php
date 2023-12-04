@@ -1,6 +1,7 @@
 <?php
+require_once "../Model/Model.php";
 
-class CartProduct extends Database
+class CartProduct extends Model
 {
     public function create(array $cartId, int $productId, int $quantity): void
     {

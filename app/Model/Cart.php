@@ -1,13 +1,29 @@
 <?php
-class Cart extends Database
+require_once "../Model/Model.php";
+class Cart extends Model
 {
-    public function getOne(int $userId): array
+    private int $userId;
+
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+
+    public function __construct($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    public static function getOneByUserId(PDO $pdo, int $userId): Cart
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
-        $stmt = $this->pdo->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
+        $stmt = $pdo->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
         $stmt->execute(['userId' => $userId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $obj = new self($data['userId']);
+        return $obj;
     }
 
     public function create(int $userId): bool

@@ -13,14 +13,14 @@ class UserController
                 $email = $requestData['email'];
                 $password = $requestData['psw'];
 
-                require_once '../Model/User.php';
+                //require_once '../Model/User.php';
 
                 //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
                 /*$stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
                 $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);*/
                 $userModel = new User();
-                $data =$userModel->create( $name, $email, $password);
+                $data =$userModel->create($name, $email, $password);
 
                 /*$stmt = $pdo->prepare('SELECT * FROM users');
                 $stmt->execute();
@@ -81,19 +81,19 @@ class UserController
                 $login = $requestData['email'];
                 $password = $requestData['psw'];
 
-                require_once '../Model/User.php';
-
-                $userModel = new User();
-                $data = $userModel->getOne($login);
+                //require_once '../Model/User.php';
+                //$userModel->
+                $data = User::getOneByLogin($login);
+                //$data->
 
                 if (empty($data)) {
                     $errors['login'] = 'Логин или пароль введен неверно';
                 } else {
-                    if ($password === $data['password']) {
+                    if ($password === $data->getPassword()) {
                         //setcookie('user_id', $data['id']);
                         //Выдаем уникальный идентификатор сессии
                         session_start();
-                        $_SESSION['user_id'] = $data['id'];
+                        $_SESSION['user_id'] = $data->getId();
                         header('location: /main');
                     } else {
                         $errors['login'] = 'Логин или пароль введен неверно';
