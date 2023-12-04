@@ -2,6 +2,8 @@
 require_once "../Model/Model.php";
 class Cart extends Model
 {
+    private int $id;
+    private string $name;
     private int $userId;
 
     public function getUserId(): int
@@ -9,8 +11,10 @@ class Cart extends Model
         return $this->userId;
     }
 
-    public function __construct($userId)
+    public function __construct(int $id, string $name, int $userId)
     {
+        $this->id = $id;
+        $this->name = $name;
         $this->userId = $userId;
     }
 
@@ -22,7 +26,7 @@ class Cart extends Model
         $stmt->execute(['userId' => $userId]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $obj = new self($data['userId']);
+        $obj = new self($data['userId'],$data['id'], $data['name']);
         return $obj;
     }
 
