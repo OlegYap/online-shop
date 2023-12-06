@@ -13,24 +13,18 @@ class CartController
                 if (isset($_SESSION->getUserId)) {
                     $userId = $_SESSION->getUserId;
 
-                    require_once '../Model/Cart.php';
-
-
                     //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
-                    $cartModel = new Cart($userId);
-                    $cart = Cart::getOneByUserId();
+                    Cart::getOneByUserId($userId);
 
                     if (empty($cart)) {
                         /*$stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
                         $stmt->execute(['name' => 'cart', 'id' => $userId]);*/
-
-                        $cartModel = new Cart($userId);
-                        $cart = $cartModel->create($userId);
+                        //$cartModel = new Cart();
+                        Cart::create($userId);
 
                         //$data = Cart::getOneByUserId($userId);
 
-                        $cartModel = new Cart($userId);
                         $cart = Cart::getOneByUserId($userId);
                         //$cart = $cartModel->getOneByUserId($userId);
 
@@ -38,10 +32,9 @@ class CartController
                         //$stmt->execute(['userId' => $userId]);
                         //$cart = $stmt->fetch(PDO::FETCH_ASSOC);
                     }
-                    require_once '../Model/CartProduct.php';
-                    $cartId = $cart['id'];
-                    $cartProductModel = new CartProduct();
-                    $cartProductModel->create($cartId, $productId, $quantity);
+                    $cartId = $cart->getId();
+                    //$cartProductModel = new CartProduct();
+                    CartProduct::create($cartId, $productId, $quantity);
 
                     //$stmt = $pdo->prepare(query: 'INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)');
                     //$stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);

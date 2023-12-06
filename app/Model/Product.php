@@ -15,10 +15,31 @@ class Product extends Model
         $this->price = $price;
         $this->description = $description;
     }
-    public static function getAll(PDO $pdo)
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public static function getAll(): array|Product
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres","dbuser","dbpwd");
-        $stmt = $pdo->prepare('SELECT * FROM products');
+        $stmt = self::getPDO()->prepare('SELECT * FROM products');
         $stmt->execute();
         $data = $stmt->fetchAll();
 

@@ -2,10 +2,15 @@
 
 class Model
 {
-    protected PDO $pdo;
+    protected static PDO $pdo;
 
-    public function __construct()
+    public static function getPDO()
     {
-        $this->pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
+        if (isset(self::$pdo)){
+            return self::$pdo;
+        }
+        self::$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
+
+        return self::$pdo;
     }
 }

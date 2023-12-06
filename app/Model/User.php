@@ -8,6 +8,15 @@ class User extends Model
     private string $email;
     private string $password;
 
+    public function __construct(int $id,string $name,string $email,string $password)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->email = $email;
+        $this->password = $password;
+
+    }
+
     public function getId(): int
     {
         return $this->id;
@@ -27,44 +36,42 @@ class User extends Model
         return $this->password;
     }
 
-    public function __construct(int $id,string $name,string $email,string $password)
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
-
-    }
-
-
-    public function create(string $name, string $email,string $password): array|bool
+    public static function create(string $name, string $email,string $password): array|bool
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = self::getPDO()->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
        return $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
     }
-    public static function getOneByLogin(PDO $pdo, $login): User
+    public static function getOneByLogin($login): User|null
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-        $stmt = $pdo->prepare('SELECT * FROM users WHERE email=:email');
+        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email=:email');
         $stmt->execute(['email' => $login]);
         $data = $stmt->fetch();
 
-        $obj = new self($data['id'],$data['name'],$data['email'], $data['password']);
+        if (empty($data))
+        {
+            return null;
+        }
 
-        return $obj;
+        return new self($data['id'],$data['name'],$data['email'], $data['password']);
     }
-    public static function getAll(PDO $pdo): bool|array
+    public static function getAll(): array|null
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-        $stmt = $pdo->prepare('SELECT * FROM users');
+        $stmt = self::getPDO()->prepare('SELECT * FROM users');
         $stmt->execute();
         $data = $stmt->fetchAll();
 
+        if (empty($data))
+        {
+            return null;
+        }
+
         $users = [];
         foreach ($data as $obj) {
-            $arr = new self($obj['id'],$obj['name'],$obj['email'],$obj['password']);
-            $users = $arr;
+            $user = new self($obj['id'],$obj['name'],$obj['email'],$obj['password']);
+            $users[] = $user;
         }
         return $users;
     }

@@ -12,6 +12,7 @@ class UserController
                 $name = $requestData['name'];
                 $email = $requestData['email'];
                 $password = $requestData['psw'];
+                $passwordR = $requestData['psw-repeat'];
 
                 //require_once '../Model/User.php';
 
@@ -19,14 +20,13 @@ class UserController
 
                 /*$stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
                 $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);*/
-                $userModel = new User();
-                $data =$userModel->create($name, $email, $password);
+                //$userModel = new User();
+                User::create($name, $email, $password);
 
                 /*$stmt = $pdo->prepare('SELECT * FROM users');
                 $stmt->execute();
                 $data = $stmt->fetchAll();*/
-                $userModel = new User();
-                $data = $userModel->getAll();
+                User::getAll();
 
                 header('location: /login');
             }
@@ -83,17 +83,17 @@ class UserController
 
                 //require_once '../Model/User.php';
                 //$userModel->
-                $data = User::getOneByLogin($login);
+                $requestData = User::getOneByLogin($login);
                 //$data->
 
-                if (empty($data)) {
+                if (empty($requestData)) {
                     $errors['login'] = 'Логин или пароль введен неверно';
                 } else {
-                    if ($password === $data->getPassword()) {
+                    if ($password === $requestData->getPassword()) {
                         //setcookie('user_id', $data['id']);
                         //Выдаем уникальный идентификатор сессии
                         session_start();
-                        $_SESSION['user_id'] = $data->getId();
+                        $_SESSION['user_id'] = $requestData->getId();
                         header('location: /main');
                     } else {
                         $errors['login'] = 'Логин или пароль введен неверно';

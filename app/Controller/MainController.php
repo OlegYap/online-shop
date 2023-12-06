@@ -7,8 +7,8 @@ class MainController
         session_start();
         if (isset($_SESSION['user_id'])) {
             require_once '../Model/Product.php';
-            $mainModel = new Product();
-            $products = $mainModel->getAll();
+            //$mainModel = new Product();
+            $products = Product::getAll();
         } else {
             header('location: /login');
         }
