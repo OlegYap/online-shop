@@ -1,5 +1,7 @@
 <?php
-require_once "../Model/Model.php";
+namespace CartProduct;
+
+use Model\Model;
 
 class CartProduct extends Model
 {

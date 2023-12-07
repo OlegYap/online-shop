@@ -1,5 +1,6 @@
 <?php
-require_once "../Model/Model.php";
+namespace User;
+use Model\Model;
 
 class User extends Model
 {

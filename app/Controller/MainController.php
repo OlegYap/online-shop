@@ -1,9 +1,12 @@
 <?php
+namespace Controller;
+use Product\Product;
+
 class MainController
 {
     public function MainPage(): void
     {
-        require_once '../Model/Product.php';
+        //require_once '../Model/Product.php';
         session_start();
         if (isset($_SESSION['user_id'])) {
             require_once '../Model/Product.php';

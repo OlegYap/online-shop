@@ -1,9 +1,12 @@
 <?php
-
+namespace Controller;
+use User\User;
+use Request\Request;
 class UserController
 {
-    public function registrate(array $requestData): void
+    public function registrate(Request $request): void
     {
+        $requestData = $request->getBody();
         $requestMethod = $_SERVER['REQUEST_METHOD'];
         if ($requestMethod === 'POST') {
             $errors =$this->validateRegistrate($requestData);

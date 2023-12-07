@@ -1,5 +1,6 @@
 <?php
-require_once "../Model/Model.php";
+namespace Product;
+use Model\Model;
 
 class Product extends Model
 {
@@ -47,7 +48,7 @@ class Product extends Model
         foreach ($data as $product)
         {
             $product = new self($product['id'], $product['name'], $product['price'], $product['description']);
-            $products = $product;
+            $products[] = $product;
         }
         return $products;
     }

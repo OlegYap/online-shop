@@ -1,5 +1,8 @@
 <?php
-require_once "../Model/Model.php";
+namespace Cart;
+use Model\Model;
+use PDO;
+
 class Cart extends Model
 {
     private int $id;

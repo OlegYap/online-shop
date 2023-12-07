@@ -1,29 +1,60 @@
 <?php
+use Controller\CartController;
+use Controller\UserController;
+use Controller\MainController;
+use Request\Request;
+
+$requestUri = $_SERVER['REQUEST_URI'];
+$autoload = function (string $classname)
+{
+    $path = str_replace('\\','/',$classname);
+    $path = dirname(__DIR__) . "/" . $path . ".php";
+
+    if (file_exists($path))
+    {
+        require_once $path;
+    }
+};
+
+spl_autoload_register($autoload);
+
+$routes = [
+    '/login' => [
+        'class' => UserController::class,
+        'method' => 'login',
+    ],
+    '/registrate' => [
+        'class' => UserController::class,
+        'method' => 'registrate',
+    ],
+    '/main' => [
+        'class' => MainController::class,
+        'method' => 'main',
+    ],
+    '/add-product' => [
+        'class' => CartController::class,
+        'method' => 'add-product'
+    ]
+];
 $requestUri = $_SERVER['REQUEST_URI'];
 
-$autoload1 = function (string $classname)
+if (isset($routes[$requestUri]))
 {
-    $path = "../Controller/$classname.php";
-    if (file_exists($path))
-    {
-        require_once $path;
-    }
-};
+    $handler = $routes[$requestUri];
+    $class = $handler['class'];
+    $method = $handler['method'];
 
-$autoload2 = function (string $classname)
-{
-    $path = "../Model/$classname.php";
-    if (file_exists($path))
-    {
-        require_once $path;
-    }
-};
+    $obj = new $class();
+    $method = $_SERVER["REQUEST_METHOD"];
+    $request = new Request($method);
+    $request->setBody($_POST);
 
-spl_autoload_register($autoload1);
-spl_autoload_register($autoload2);
+    $obj->$method($request);
+} else {
+    echo 'Not Found';
+}
 
-
-if ($requestUri === '/login') {
+/*if ($requestUri === '/login') {
     $userController = new UserController();
     $userController->login($_POST);
 } elseif ($requestUri === '/registrate') {
@@ -37,4 +68,4 @@ if ($requestUri === '/login') {
     $cartController->addProduct($_POST);
 } else {
     echo 'Not Found';
-}
+}*/

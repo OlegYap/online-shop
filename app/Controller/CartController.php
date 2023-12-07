@@ -1,8 +1,13 @@
 <?php
+namespace Controller;
+use Cart\Cart;
+use CartProduct\CartProduct;
+use Request\Request;
 class CartController
 {
-    public function addProduct($requestData): void
+    public function addProduct(Request $request): void
     {
+        $requestData = $request->getBody();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors =$this->validateAddProduct($requestData);
             if (empty($errors)) {
@@ -21,11 +26,12 @@ class CartController
                         /*$stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
                         $stmt->execute(['name' => 'cart', 'id' => $userId]);*/
                         //$cartModel = new Cart();
-                        Cart::create($userId);
+
 
                         //$data = Cart::getOneByUserId($userId);
-
+                        Cart::create($userId);
                         $cart = Cart::getOneByUserId($userId);
+
                         //$cart = $cartModel->getOneByUserId($userId);
 
                         //$stmt = $pdo->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
