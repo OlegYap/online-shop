@@ -1,6 +1,5 @@
 <?php
-namespace Product;
-use Model\Model;
+namespace Model;
 
 class Product extends Model
 {
@@ -15,6 +14,19 @@ class Product extends Model
         $this->name = $name;
         $this->price = $price;
         $this->description = $description;
+    }
+
+    public static function getByIds(): array
+    {
+        $stmt = self::getPDO()->prepare('SELECT  FROM products WHERE product_id = product_id ');
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+        $products = [];
+        foreach ($data as $product)
+        {
+            $product[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+        }
+        return $products;
     }
 
     public function getId(): int
@@ -47,8 +59,8 @@ class Product extends Model
         $products = [];
         foreach ($data as $product)
         {
-            $product = new self($product['id'], $product['name'], $product['price'], $product['description']);
-            $products[] = $product;
+            $product[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+/*            $products[] = $product;*/
         }
         return $products;
     }

@@ -1,17 +1,20 @@
 <?php
 namespace Controller;
-use Product\Product;
+use Model\Product;
 
 class MainController
 {
-    public function MainPage(): void
+    public function getMain()
     {
-        //require_once '../Model/Product.php';
+        require_once '../View/main.phtml';
+    }
+    public function postMainPage(): void
+    {
         session_start();
-        if (isset($_SESSION['user_id'])) {
-            require_once '../Model/Product.php';
+        if (isset($_SESSION->getUserId)) {
+           // require_once '../Model/Product.php';
             //$mainModel = new Product();
-            $products = Product::getAll();
+           $products = Product::getAll();
         } else {
             header('location: /login');
         }

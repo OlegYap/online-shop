@@ -1,10 +1,11 @@
 <?php
 namespace Model;
+use PDO;
 class Model
 {
     protected static PDO $pdo;
 
-    public static function getPDO()
+    public static function getPDO(): PDO
     {
         if (isset(self::$pdo)){
             return self::$pdo;

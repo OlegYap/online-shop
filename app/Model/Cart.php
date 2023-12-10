@@ -1,5 +1,5 @@
 <?php
-namespace Cart;
+namespace Model;
 use Model\Model;
 use PDO;
 

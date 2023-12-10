@@ -1,76 +1,52 @@
 <?php
 namespace Controller;
-use Cart\Cart;
-use CartProduct\CartProduct;
+use Model\Cart;
+use Model\CartProduct;
+use Model\Product;
+use Request\AddProductRequest;
 use Request\Request;
 class CartController
 {
-    public function addProduct(Request $request): void
+    public function getAddProduct()
     {
-        $requestData = $request->getBody();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $errors =$this->validateAddProduct($requestData);
-            if (empty($errors)) {
-                $productId = $requestData['product-id'];
-                $quantity = $requestData['quantity'];
+        require_once '../View/main.phtml';
+    }
 
-                session_start();
-                if (isset($_SESSION->getUserId)) {
-                    $userId = $_SESSION->getUserId;
+    public function PostAddProduct(AddProductRequest $request): void
+    {
+        $errors = $request->validate();
+        if (empty($errors)) {
+            $requestData = $request->getBody();
+            $productId = $requestData['product-id'];
+            $quantity = $requestData['quantity'];
+            session_start();
+            if (isset($_SESSION->getUserId)) {
+                $userId = $_SESSION->getUserId;
+                Cart::getOneByUserId($userId);
 
-                    //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-
-                    Cart::getOneByUserId($userId);
-
-                    if (empty($cart)) {
-                        /*$stmt = $pdo->prepare(query: 'INSERT INTO carts ( name, user_id) VALUES (:name, :id)');
-                        $stmt->execute(['name' => 'cart', 'id' => $userId]);*/
-                        //$cartModel = new Cart();
-
-
-                        //$data = Cart::getOneByUserId($userId);
-                        Cart::create($userId);
-                        $cart = Cart::getOneByUserId($userId);
-
-                        //$cart = $cartModel->getOneByUserId($userId);
-
-                        //$stmt = $pdo->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
-                        //$stmt->execute(['userId' => $userId]);
-                        //$cart = $stmt->fetch(PDO::FETCH_ASSOC);
-                    }
-                    $cartId = $cart->getId();
-                    //$cartProductModel = new CartProduct();
-                    CartProduct::create($cartId, $productId, $quantity);
-
-                    //$stmt = $pdo->prepare(query: 'INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)');
-                    //$stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
-                    header('location: /main');
+                if (empty($cart)) {
+                    Cart::create($userId);
+                    $cart = Cart::getOneByUserId($userId);
                 }
-                require_once '../View/main.phtml';
+                $cartId = $cart->getId();
+                CartProduct::create($cartId, $productId, $quantity);
+                header('location: /main');
             }
+            require_once '../View/main.phtml';
         }
     }
-    private function validateAddProduct(array $data): array
+    public function CartPage(AddProductRequest $request): void
     {
-        $errors = [];
-        if (isset($data['email'])) {
-            $login = $data['email'];
-            if (empty($login)) {
-                $errors ['login'] = 'Заполните поле Login';
-            } elseif (!strpos($login, '@')) {
-                $errors['login'] = "Некорректный формат почты";
-            }
-        } else {
-            $errors['login'] = 'Заполните поле Login';
+        session_start();
+        $userId = $_SESSION['user-id'];
+        $cart = Cart::getOneByUserId($userId);
+        $cartId = $cart->getId();
+        $cartProducts = CartProduct::GetAllByUserId($userId);
+        $productsIds = [];
+        foreach ($cartProducts as $cartProduct) {
+            $productsIds[] = $cartProduct->getProductId;
         }
-        if (isset($data['psw'])) {
-            $password = $data['psw'];
-            if (empty($password)) {
-                $errors['psw'] = 'Введите пароль';
-            }
-        } else {
-            $errors['psw'] = 'Введите пароль';
-        }
-        return $errors;
+        $products = Product::getByIds($productsIds);
+        require_once '../View/cart.phtml';
     }
 }

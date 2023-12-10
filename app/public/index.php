@@ -2,9 +2,10 @@
 use Controller\CartController;
 use Controller\UserController;
 use Controller\MainController;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
 use Request\Request;
 
-$requestUri = $_SERVER['REQUEST_URI'];
 $autoload = function (string $classname)
 {
     $path = str_replace('\\','/',$classname);
@@ -20,39 +21,96 @@ spl_autoload_register($autoload);
 
 $routes = [
     '/login' => [
-        'class' => UserController::class,
-        'method' => 'login',
+        'GET' => [
+            'class' => UserController::class,
+            'method' => 'getLogin',
+        ],
+        'POST' => [
+            'class' => UserController::class,
+            'method' => 'postLogin',
+            'request' => LoginRequest::class
+        ]
     ],
     '/registrate' => [
-        'class' => UserController::class,
-        'method' => 'registrate',
+        'GET' => [
+            'class' => UserController::class,
+            'method' => 'getRegistrateForm',
+        ],
+        'POST' => [
+            'class' => UserController::class,
+            'method' => 'postRegistrate',
+            'request' => RegistrateRequest::class
+        ]
     ],
     '/main' => [
-        'class' => MainController::class,
-        'method' => 'main',
+        'GET' => [
+            'class' => MainController::class,
+            'method' => 'getMain',
+        ],
+        'POST' => [
+            'class' => MainController::class,
+            'method' => 'postMain',
+        ]
     ],
     '/add-product' => [
-        'class' => CartController::class,
-        'method' => 'add-product'
+        'GET' => [
+            'class' => CartController::class,
+            'method' => 'getAddProduct'
+        ],
+        'POST' => [
+            'class' => CartController::class,
+            'method' => 'postAddProduct'
+        ]
+    ],
+    '/cart' => [
+        'GET' => [
+            'class' => CartController::class,
+            'method' => 'CartPage'
+        ]
     ]
 ];
 $requestUri = $_SERVER['REQUEST_URI'];
+if (isset($routes[$requestUri])) {
+    $routeMethods = $routes[$requestUri];
+    $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-if (isset($routes[$requestUri]))
-{
-    $handler = $routes[$requestUri];
-    $class = $handler['class'];
-    $method = $handler['method'];
+    if (isset($routeMethods[$requestMethod])) {
+        $handler = $routeMethods[$requestMethod];
+        $class = $handler['class'];
+        $method = $handler['method'];
 
-    $obj = new $class();
-    $method = $_SERVER["REQUEST_METHOD"];
-    $request = new Request($method);
-    $request->setBody($_POST);
+        // Проверка на наличие ключа "request"
+        if (isset($handler['request'])) {
+            $requestClass = $handler['request'];
+            $request = new $requestClass($requestMethod, $_POST);
+        } else {
+            $request = new Request($requestMethod, $_POST);
+        }
 
-    $obj->$method($request);
-} else {
-    echo 'Not Found';
+        $obj = new $class();
+        $obj->$method($request);
+    } else {
+        echo "Метод $requestMethod для $requestUri не поддерживается";
+    }
 }
+/*if (isset($routes[$requestUri])) {
+    $routeMethods = $routes[$requestUri];
+    $requestMethod = $_SERVER['REQUEST_METHOD'];
+
+    if (isset($routeMethods[$requestMethod])) {
+        $handler = $routeMethods[$requestMethod];
+        $class = $handler['class'];
+        $method = $handler['method'];
+        $requestClass = $handler['request'];
+        $obj = new $class();
+        $request = new $requestClass($requestMethod, $_POST);
+
+        //$request->setBody($_POST);
+        $obj->$method($request);
+    } else {
+        echo "Метод $requestMethod для $requestUri не поддерживается";
+    }
+}*/
 
 /*if ($requestUri === '/login') {
     $userController = new UserController();

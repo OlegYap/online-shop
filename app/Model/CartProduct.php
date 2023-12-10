@@ -1,5 +1,5 @@
 <?php
-namespace CartProduct;
+namespace Model;
 
 use Model\Model;
 
@@ -23,6 +23,20 @@ class CartProduct extends Model
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
         $stmt =self::getPDO()->prepare("INSERT INTO cart_products (cart_id, product_id, quantity) VALUES (:cart_id, :product_id, :quantity)");
         return $stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
+    }
+
+    public static function GetAllByUserId(int $cartId)
+    {
+        $stmt = self::getPDO()->prepare("SELECT * FROM cart_products WHERE cart_id = cart_id");
+        $stmt->execute(['cart_id' => $cartId]);
+        $data = $stmt->fetchAll();
+
+        $arr = [];
+        foreach ($data as $products)
+        {
+            $arr[] = new self($data['id'], $data['cart_id'], $data['product_id'], $data['quantity']);
+        }
+        return $arr;
     }
 
     public function getId(): int

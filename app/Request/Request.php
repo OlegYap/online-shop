@@ -4,9 +4,9 @@ namespace Request;
 
 class Request
 {
-    private string $method;
-    private array $headers;
-    private array $body;
+    protected string $method;
+    protected array $headers;
+    protected array $body;
 
     public function __construct(string $method, array $headers = [])
     {
