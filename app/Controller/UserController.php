@@ -3,10 +3,9 @@ namespace Controller;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Model\User;
-use Request\Request;
 class UserController
 {
-    public function getRegistrateForm()
+    public function getRegistrateForm(): void
     {
         require_once '../View/registrate.phtml';
 
@@ -32,7 +31,6 @@ class UserController
     public function getLogin()
     {
         require_once '../View/login.phtml';
-
     }
 
     public function postLogin(LoginRequest $requestData): void

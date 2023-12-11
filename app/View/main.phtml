@@ -12,8 +12,12 @@
                     <div class="card-body">
                         <p class="card-text"><?php echo $product->getName; ?> </p>
                         <div class="text"><?php echo $product->getDescription;?></div>
-                        <input type="text" placeholder="product-id" name="product-id" required hidden="" value="<?php echo $product['id'];?>">
-                        <input type="text" placeholder="quantity" name="quantity" required>
+                        <label>
+                            <input type="text" placeholder="product-id" name="product-id" required hidden="" value="<?php echo $product['id'];?>">
+                        </label>
+                        <label>
+                            <input type="text" placeholder="quantity" name="quantity" required>
+                        </label>
                         <div class="card-footer">
                             <?php echo $product->getPrice . " rub"; ?>
                         </div>
@@ -70,10 +74,6 @@
         font-size: 13px;
         color: red;
         background-color: white;
-    }
-
-    .text-muted {
-        font-size: 11px;
     }
 
     .card-footer{

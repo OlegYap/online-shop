@@ -1,7 +1,7 @@
 <body>
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 <div class="wrapper">
-    <form action="" method="POST">
+    <form action="/add-product" method="POST">
         <h1>Login</h1>
         <div class="input-box">
             <?php if (isset($errors['login'])): ?>
@@ -19,11 +19,11 @@
         </div>
         <div class="remember-forgot">
             <label><input type="checkbox">Remember me</label>
-            <a href="#">Forgot password?</a>
+            <a href="/registrate">Forgot password?</a>
         </div>
         <button type="submit" class="btn">Login</button>
         <div class="register-link">
-            <p>Don't have an account? <a href="#">Register</a></p>
+            <p>Don't have an account? <a href="/registrate">Register</a></p>
         </div>
     </form>
 </div>

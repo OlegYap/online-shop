@@ -2,6 +2,7 @@
 use Controller\CartController;
 use Controller\UserController;
 use Controller\MainController;
+use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Request\Request;
@@ -49,7 +50,8 @@ $routes = [
         ],
         'POST' => [
             'class' => MainController::class,
-            'method' => 'postMain',
+            'method' => 'postMainPage',
+            'request' => AddProductRequest::class
         ]
     ],
     '/add-product' => [
@@ -59,14 +61,16 @@ $routes = [
         ],
         'POST' => [
             'class' => CartController::class,
-            'method' => 'postAddProduct'
+            'method' => 'postAddProduct',
+            'request' => AddProductRequest::class
+
         ]
     ],
     '/cart' => [
-        'GET' => [
+        'POST' => [
             'class' => CartController::class,
-            'method' => 'CartPage'
-        ]
+            'method' => 'getPage'
+        ],
     ]
 ];
 $requestUri = $_SERVER['REQUEST_URI'];

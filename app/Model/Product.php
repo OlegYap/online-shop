@@ -16,10 +16,11 @@ class Product extends Model
         $this->description = $description;
     }
 
-    public static function getByIds(): array
+    public static function getByIds(array $ids): array
     {
-        $stmt = self::getPDO()->prepare('SELECT  FROM products WHERE product_id = product_id ');
-        $stmt->execute();
+        $ids = implode(', ',$ids);
+        $stmt = self::getPDO()->prepare('SELECT  FROM products WHERE id IN (:ids)');
+        $stmt->execute(['id' => $ids]);
         $data = $stmt->fetchAll();
         $products = [];
         foreach ($data as $product)
@@ -34,12 +35,12 @@ class Product extends Model
         return $this->id;
     }
 
-    public function getName(): string
+    public  function getName(): string
     {
         return $this->name;
     }
 
-    public function getPrice(): float
+    public  function getPrice(): float
     {
         return $this->price;
     }
@@ -60,7 +61,7 @@ class Product extends Model
         foreach ($data as $product)
         {
             $product[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
-/*            $products[] = $product;*/
+            //$products[] = $product;
         }
         return $products;
     }

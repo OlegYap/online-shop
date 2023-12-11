@@ -1,8 +1,6 @@
 <?php
 namespace Model;
 
-use Model\Model;
-
 class CartProduct extends Model
 {
     private int $id;
@@ -25,16 +23,16 @@ class CartProduct extends Model
         return $stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
     }
 
-    public static function GetAllByUserId(int $cartId)
+    public static function getAllByUserId(int $cartId): array
     {
         $stmt = self::getPDO()->prepare("SELECT * FROM cart_products WHERE cart_id = cart_id");
         $stmt->execute(['cart_id' => $cartId]);
         $data = $stmt->fetchAll();
 
         $arr = [];
-        foreach ($data as $products)
+        foreach ($data as $cartProduct)
         {
-            $arr[] = new self($data['id'], $data['cart_id'], $data['product_id'], $data['quantity']);
+            $arr[$data['product-id']] = new self($cartProduct['id'], $cartProduct['cart_id'], $cartProduct['product_id'], $cartProduct['quantity']);
         }
         return $arr;
     }

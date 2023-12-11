@@ -4,6 +4,21 @@
     <title>Cart</title>
 </head>
 <body>
+<div class="container">
+    <h3>Catalog</h3>
+    <div class="card-deck">
+        <?php foreach ($products as $product): ?>
+            <form action="" method="POST">
+                    <div class="card-body">
+                        <div class="card-name"><?php echo $product->getName(); ?></div>
+                        <div class="card-price"><?php echo $product->getPrice() . " rub"; ?></div>
+                        <div class="card-quantity"><?php echo $product->getQuantity(); ?></div>
+                    </div>
+                </div>
+            </form>
+        <?php endforeach; ?>
+    </div>
+</div>
 </body>
 <style>
     .container {

@@ -7,12 +7,12 @@ use Request\AddProductRequest;
 use Request\Request;
 class CartController
 {
-    public function getAddProduct()
+    public function getAddProduct(): void
     {
         require_once '../View/main.phtml';
     }
 
-    public function PostAddProduct(AddProductRequest $request): void
+    public function postAddProduct(AddProductRequest $request): void
     {
         $errors = $request->validate();
         if (empty($errors)) {
@@ -35,18 +35,25 @@ class CartController
             require_once '../View/main.phtml';
         }
     }
-    public function CartPage(AddProductRequest $request): void
+
+    public function getPage(): void
     {
         session_start();
         $userId = $_SESSION['user-id'];
         $cart = Cart::getOneByUserId($userId);
         $cartId = $cart->getId();
-        $cartProducts = CartProduct::GetAllByUserId($userId);
+        $cartProducts = CartProduct::getAllByUserId($userId);
         $productsIds = [];
         foreach ($cartProducts as $cartProduct) {
             $productsIds[] = $cartProduct->getProductId;
         }
         $products = Product::getByIds($productsIds);
-        require_once '../View/cart.phtml';
+        foreach ($cartProducts as $cartProduct) {
+            $productId = $cartProduct->getProductId();
+            $product = Product::getByIds($productId); // Получаем информацию о продукте по его ID
+            $productName = $product->getName();
+            $productPrice = $product->getPrice();
+            $quantity = $cartProduct->getQuantity();
+        }
     }
 }
