@@ -12,9 +12,9 @@ class MainController
     {
         session_start();
         if (isset($_SESSION['user-id'])) {
-           // require_once '../Model/Product.php';
+            //require_once '../Model/Product.php';
             //$mainModel = new Product();
-           $products = Product::getAll();
+            $products = Product::getAll();
         } else {
             header('location: /login');
         }

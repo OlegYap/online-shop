@@ -33,17 +33,17 @@ class App
                     'request' => RegistrateRequest::class
                 ]
             ],
-            '/main' => [
-                'GET' => [
-                    'class' => MainController::class,
-                    'method' => 'getMain',
-                ],
-                'POST' => [
-                    'class' => MainController::class,
-                    'method' => 'postMainPage',
-                    'request' => AddProductRequest::class
-                ]
+        '/main' => [
+            'GET' => [
+                'class' => MainController::class,
+                'method' => 'getMain',
             ],
+            'POST' => [
+                'class' => MainController::class,
+                'method' => 'postMainPage',
+                'request' => AddProductRequest::class
+            ]
+        ],
             '/add-product' => [
                 'GET' => [
                     'class' => CartController::class,
@@ -61,10 +61,6 @@ class App
                     'class' => CartController::class,
                     'method' => 'getPage'
                 ],
-                /*        'POST' => [
-                            'class' => CartController::class,
-                            'method' => 'postPage'
-                        ]*/
             ]
     ];
     public function run(): void

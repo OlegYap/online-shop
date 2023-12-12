@@ -2,24 +2,24 @@
 <div class="container">
     <h3>Catalog</h3>
     <div class="card-deck">
-        <?php foreach ($products as $product): ?>
-            <form action="/add-product" method="POST">
+         <?php foreach ($products as $product): ?>
+            <form action="/main" method="POST">
                 <div class="card text-center">
                     <div class="card-header">
                         Фрукты
                         <img class="card-img-top" src='https://img.freepik.com/premium-photo/slices-of-fresh-banana-and-pieces-of-strawberries-with-mint-leaves-on-white-background_124507-38152.jpg' alt=''>
                     </div>
                     <div class="card-body">
-                        <p class="card-text"><?php echo $product->getName; ?> </p>
-                        <div class="text"><?php echo $product->getDescription;?></div>
+                        <p class="card-text"><?php echo $product->getName(); ?> </p>
+                        <div class="text"><?php echo $product->getDescription();?></div>
                         <label>
-                            <input type="text" placeholder="product-id" name="product-id" required hidden="" value="<?php echo $product['id'];?>">
+                            <input type="text" placeholder="product-id" name="product-id" required hidden="" value="<?php echo $product->getId();?>">
                         </label>
                         <label>
                             <input type="text" placeholder="quantity" name="quantity" required>
                         </label>
                         <div class="card-footer">
-                            <?php echo $product->getPrice . " rub"; ?>
+                            <?php echo $product->getPrice() . " rub"; ?>
                         </div>
                         <button class="btn">add to cart</button>
                     </div>

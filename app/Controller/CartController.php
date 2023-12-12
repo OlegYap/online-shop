@@ -38,13 +38,14 @@ class CartController
     public function getPage(): void
     {
         session_start();
+        // Добавить проверку на авторизацию пользователя
         $userId = $_SESSION['user-id'];
         $cart = Cart::getOneByUserId($userId);
         $cartId = $cart->getId();
-        $cartProducts = CartProduct::getAllByCartId($userId);
+        $cartProducts = CartProduct::getAllByCartId($cart->getId());
         $productsIds = [];
         foreach ($cartProducts as $cartProduct) {
-            $productsIds[] = $cartProduct->getProductId;
+            $productsIds[] = $cartProduct->getProductId();
         }
         $products = Product::getByIds($productsIds);
         require_once '../View/cart.phtml';

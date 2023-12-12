@@ -55,14 +55,13 @@ class Product extends Model
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres","dbuser","dbpwd");
         $stmt = self::getPDO()->prepare('SELECT * FROM products');
-        $stmt->execute();
+        //$stmt->execute();
         $data = $stmt->fetchAll();
 
         $products = [];
         foreach ($data as $product)
         {
-            $product[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
-            //$products[] = $product;
+            $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
         }
         return $products;
     }

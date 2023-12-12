@@ -13,6 +13,7 @@
                     <div class="card-body">
                         <div class="card-name"><?php echo $product->getName(); ?></div>
                         <div class="card-price"><?php echo $product->getPrice() . " rub"; ?></div>
+                        <div class="card-price"><?php echo $product->getQuantity(); ?></div>
                     </div>
                 </form>
             </div>
@@ -77,4 +78,3 @@
         background-color: white;
     }
 </style>
-</html>
