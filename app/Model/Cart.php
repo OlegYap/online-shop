@@ -1,6 +1,5 @@
 <?php
 namespace Model;
-use Model\Model;
 use PDO;
 
 class Cart extends Model
@@ -47,6 +46,7 @@ class Cart extends Model
 
         return new self($data['userId'],$data['id'], $data['name']);
     }
+
 
     public static function create(int $userId): bool
     {

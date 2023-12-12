@@ -4,7 +4,6 @@ use Model\Cart;
 use Model\CartProduct;
 use Model\Product;
 use Request\AddProductRequest;
-use Request\Request;
 class CartController
 {
     public function getAddProduct(): void
@@ -20,8 +19,8 @@ class CartController
             $productId = $requestData['product-id'];
             $quantity = $requestData['quantity'];
             session_start();
-            if (isset($_SESSION->getUserId)) {
-                $userId = $_SESSION->getUserId;
+            if (isset($_SESSION['user-id'])) {
+                $userId = $_SESSION['user-id'];
                 Cart::getOneByUserId($userId);
 
                 if (empty($cart)) {
@@ -42,18 +41,12 @@ class CartController
         $userId = $_SESSION['user-id'];
         $cart = Cart::getOneByUserId($userId);
         $cartId = $cart->getId();
-        $cartProducts = CartProduct::getAllByUserId($userId);
+        $cartProducts = CartProduct::getAllByCartId($userId);
         $productsIds = [];
         foreach ($cartProducts as $cartProduct) {
             $productsIds[] = $cartProduct->getProductId;
         }
         $products = Product::getByIds($productsIds);
-        foreach ($cartProducts as $cartProduct) {
-            $productId = $cartProduct->getProductId();
-            $product = Product::getByIds($productId); // Получаем информацию о продукте по его ID
-            $productName = $product->getName();
-            $productPrice = $product->getPrice();
-            $quantity = $cartProduct->getQuantity();
-        }
+        require_once '../View/cart.phtml';
     }
 }

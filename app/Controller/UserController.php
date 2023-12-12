@@ -20,6 +20,9 @@ class UserController
                 $email = $requestData['email'];
                 $password = $requestData['psw'];
                 $passwordR = $requestData['psw-repeat'];
+                $hash = password_hash($password, PASSWORD_DEFAULT);
+
+
                 User::create($name, $email, $password);
                 User::getAll();
 
@@ -45,7 +48,7 @@ class UserController
                 if (empty($requestData)) {
                     $errors['login'] = 'Логин или пароль введен неверно';
                 } else {
-                    if ($password === $requestData->getPassword()) {
+                    if (password_verify($password, $requestData->getPassword())) {
                         //setcookie('user_id', $data['id']);
                         //Выдаем уникальный идентификатор сессии
                         session_start();

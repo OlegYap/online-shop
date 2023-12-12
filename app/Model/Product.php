@@ -18,14 +18,15 @@ class Product extends Model
 
     public static function getByIds(array $ids): array
     {
-        $ids = implode(', ',$ids);
-        $stmt = self::getPDO()->prepare('SELECT  FROM products WHERE id IN (:ids)');
-        $stmt->execute(['id' => $ids]);
+        $placeholders = implode(', ',array_fill(0,count($ids),'?'));
+        $stmt = self::getPDO()->prepare("SELECT * FROM products WHERE id IN ($placeholders)");
+        $stmt->execute(array_values($ids));
         $data = $stmt->fetchAll();
+
         $products = [];
         foreach ($data as $product)
         {
-            $product[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+            $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
         }
         return $products;
     }
