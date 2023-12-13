@@ -4,16 +4,11 @@ use Model\Product;
 
 class MainController
 {
-    public function getMain(): void
-    {
-        require_once '../View/main.phtml';
-    }
-    public function postMainPage(): void
+    public function getMainPage(): void
     {
         session_start();
+        echo 'getMainPage';
         if (isset($_SESSION['user-id'])) {
-            //require_once '../Model/Product.php';
-            //$mainModel = new Product();
             $products = Product::getAll();
         } else {
             header('location: /login');

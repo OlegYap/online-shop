@@ -16,16 +16,29 @@ class Product extends Model
         $this->description = $description;
     }
 
+    public static function getAll(): array
+    {
+        $stmt = self::getPDO()->prepare('SELECT * FROM products');
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        $products = [];
+        foreach ($data as $product) {
+            $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+        }
+        return $products;
+    }
+
+
     public static function getByIds(array $ids): array
     {
-        $placeholders = implode(', ',array_fill(0,count($ids),'?'));
+        $placeholders = implode(', ', array_fill(0, count($ids), '?'));
         $stmt = self::getPDO()->prepare("SELECT * FROM products WHERE id IN ($placeholders)");
         $stmt->execute(array_values($ids));
         $data = $stmt->fetchAll();
 
         $products = [];
-        foreach ($data as $product)
-        {
+        foreach ($data as $product) {
             $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
         }
         return $products;
@@ -36,12 +49,12 @@ class Product extends Model
         return $this->id;
     }
 
-    public  function getName(): string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public  function getPrice(): float
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -49,20 +62,5 @@ class Product extends Model
     public function getDescription(): string
     {
         return $this->description;
-    }
-
-    public static function getAll(): array|Product
-    {
-        //$pdo = new PDO("pgsql:host=db;dbname=postgres","dbuser","dbpwd");
-        $stmt = self::getPDO()->prepare('SELECT * FROM products');
-        //$stmt->execute();
-        $data = $stmt->fetchAll();
-
-        $products = [];
-        foreach ($data as $product)
-        {
-            $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
-        }
-        return $products;
     }
 }

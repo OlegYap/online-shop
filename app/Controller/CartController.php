@@ -8,7 +8,7 @@ class CartController
 {
     public function getAddProduct(): void
     {
-        require_once '../View/main.phtml';
+        require_once '../View/main.phtml';;
     }
 
     public function postAddProduct(AddProductRequest $request): void
@@ -23,7 +23,7 @@ class CartController
                 $userId = $_SESSION['user-id'];
                 Cart::getOneByUserId($userId);
 
-                if (empty($cart)) {
+                if (!isset($cart)) {
                     Cart::create($userId);
                     $cart = Cart::getOneByUserId($userId);
                 }
@@ -32,22 +32,26 @@ class CartController
                 header('location: /main');
             }
             require_once '../View/main.phtml';
+            ;
         }
     }
 
-    public function getPage(): void
+    public function getCartPage(): void
     {
         session_start();
-        // Добавить проверку на авторизацию пользователя
-        $userId = $_SESSION['user-id'];
-        $cart = Cart::getOneByUserId($userId);
-        $cartId = $cart->getId();
-        $cartProducts = CartProduct::getAllByCartId($cart->getId());
-        $productsIds = [];
-        foreach ($cartProducts as $cartProduct) {
-            $productsIds[] = $cartProduct->getProductId();
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+
+            $cart = Cart::getOneByUserId($userId);
+            $cartId = $cart->getId();
+            $cartProducts = CartProduct::getAllByCartId($cartId);
+
+            $productIds = [];
+            foreach ($cartProducts as $cartProduct) {
+                $productIds[] = $cartProduct->getProductId();
+            }
+            $products = Product::getByIds($productIds);
+            require_once '../View/cart.phtml';
         }
-        $products = Product::getByIds($productsIds);
-        require_once '../View/cart.phtml';
     }
 }
