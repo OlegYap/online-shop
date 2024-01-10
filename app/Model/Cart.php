@@ -39,12 +39,11 @@ class Cart extends Model
         $stmt->execute(['userId' => $userId]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($data))
-        {
+        if (empty($data)) {
             return null;
         }
 
-        return new self($data['userId'],$data['id'], $data['name']);
+        return new self($data['userId'], $data['id'], $data['name']);
     }
 
 

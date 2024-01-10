@@ -44,7 +44,7 @@ class App
                 'request' => AddProductRequest::class
             ]
         ],
-/*            '/add-product' => [
+            '/add-product' => [
                 'GET' => [
                     'class' => CartController::class,
                     'method' => 'getAddProduct'
@@ -53,15 +53,16 @@ class App
                     'class' => CartController::class,
                     'method' => 'postAddProduct',
                     'request' => AddProductRequest::class
-
-                ]*/
+                ],
            '/cart' => [
                 'GET' => [
                     'class' => CartController::class,
                     'method' => 'getCartPage'
-                ],
+                ]
            ]
+            ]
     ];
+    // Обрабатываем входящие запросы
     public function run(): void
     {
         $requestUri = $_SERVER['REQUEST_URI'];

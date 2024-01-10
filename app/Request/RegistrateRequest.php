@@ -1,15 +1,13 @@
 <?php
 
 namespace Request;
-
 class RegistrateRequest extends Request
 {
     public function validate(): array
     {
         $errors = [];
         //$data = $this->body;
-        if (isset($this->body['name']))
-        {
+        if (isset($this->body['name'])) {
             $name = $this->body['name'];
             if (strlen($name) < 2) {
                 $errors['name'] = 'Имя должно содержать больше двух букв';
@@ -30,16 +28,24 @@ class RegistrateRequest extends Request
             $errors['email'] = 'Введите email';
         }
 
-        if (isset($this->body['psw-repeat'])) {
+        if (isset($this->body['psw'])) {
             $password = $this->body['psw'];
-            $passwordR = $this->body['psw-repeat'];
-            if ($password !== $passwordR) {
+            if (strlen($password) < 6) {
                 $errors['psw'] = 'Пароль должен содержать больше 6 символов';
             }
         } else {
             $errors['psw'] = 'Введите пароль';
         }
 
+        if (isset($this->body['psw-repeat'])) {
+            $password = $this->body['psw'];
+            $passwordR = $this->body['psw-repeat'];
+            if ($password !== $passwordR) {
+                $errors['psw-repeat'] = 'Пароль не совпадает';
+            }
+        } else {
+            $errors['psw-repeat'] = 'Повторите пароль';
+        }
         return $errors;
     }
 }

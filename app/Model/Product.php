@@ -34,7 +34,7 @@ class Product extends Model
     {
         $placeholders = implode(', ', array_fill(0, count($ids), '?'));
         $stmt = self::getPDO()->prepare("SELECT * FROM products WHERE id IN ($placeholders)");
-        $stmt->execute(array_values($ids));
+        $stmt->execute($ids);
         $data = $stmt->fetchAll();
 
         $products = [];

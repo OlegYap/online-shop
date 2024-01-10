@@ -1,6 +1,5 @@
 <?php
 namespace Model;
-//use Model\Model;
 
 class User extends Model
 {
@@ -41,13 +40,13 @@ class User extends Model
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
         $stmt = self::getPDO()->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-       return $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
+        return $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
     }
-    public static function getOneByLogin($login): User|null
+    public static function getOneByLogin(string $login): User|null
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email=:email');
-        $stmt->execute(['email' => $login]);
+        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE name=:name');
+        $stmt->execute(['name' => $login]);
         $data = $stmt->fetch();
 
         if (empty($data))
@@ -69,11 +68,10 @@ class User extends Model
             return null;
         }
 
-        $users = [];
+        $arr = [];
         foreach ($data as $obj) {
-            $user = new self($obj['id'],$obj['name'],$obj['email'],$obj['password']);
-            $users[] = $user;
+            $arr[] = new self($obj['id'],$obj['name'],$obj['email'],$obj['password']);
         }
-        return $users;
+        return $arr;
     }
 }

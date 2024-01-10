@@ -2,6 +2,7 @@
 
 namespace Request;
 
+// http запрос состоит из чего? Из метода, headers, body . Из чего состоит http ответ? Из метода, URI, версию HTTP и адрес хоста. Строка статуса, headers, body. Рассказать про компоненты, из чего состоят компоненты
 class Request
 {
     protected string $method;
@@ -23,9 +24,9 @@ class Request
     {
         return $this->headers;
     }
-    public function setBody(array $body): array
+    public function setBody(array $body)
     {
-        return $this->body = $body;
+         $this->body = $body;
     }
     public function getBody(): array
     {

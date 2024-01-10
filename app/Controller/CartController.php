@@ -19,9 +19,9 @@ class CartController
             $productId = $requestData['product-id'];
             $quantity = $requestData['quantity'];
             session_start();
-            if (isset($_SESSION['user-id'])) {
-                $userId = $_SESSION['user-id'];
-                Cart::getOneByUserId($userId);
+            if (isset($_SESSION['user_id'])) {
+                $userId = $_SESSION['user_id'];
+                $cart = Cart::getOneByUserId($userId);
 
                 if (!isset($cart)) {
                     Cart::create($userId);
@@ -29,13 +29,12 @@ class CartController
                 }
                 $cartId = $cart->getId();
                 CartProduct::create($cartId, $productId, $quantity);
-                header('location: /main');
+/*                header('location: /main');*/
             }
             require_once '../View/main.phtml';
-            ;
         }
     }
-
+// Как работают сессий и куки
     public function getCartPage(): void
     {
         session_start();
@@ -45,7 +44,6 @@ class CartController
             $cart = Cart::getOneByUserId($userId);
             $cartId = $cart->getId();
             $cartProducts = CartProduct::getAllByCartId($cartId);
-
             $productIds = [];
             foreach ($cartProducts as $cartProduct) {
                 $productIds[] = $cartProduct->getProductId();

@@ -3,32 +3,33 @@ namespace Controller;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Model\User;
+
 class UserController
 {
-    public function getRegistrateForm(): void
+    public function getRegistrateForm()
     {
         require_once '../View/registrate.phtml';
-
     }
 
     public function postRegistrate(RegistrateRequest $request): void
     {
         $errors = $request->validate();
-            if (empty($errors)) {
-                $requestData = $request->getBody();
-                $name = $requestData['name'];
-                $email = $requestData['email'];
-                $password = $requestData['psw'];
-                $passwordR = $requestData['psw-repeat'];
-                $hash = password_hash($password, PASSWORD_DEFAULT);
 
+        if (empty($errors)) {
+            $requestData = $request->getBody();
+            $name = $requestData['name'];
+            $email = $requestData['email'];
+            $password = $requestData['psw'];
+            $passwordR = $requestData['psw-repeat'];
+            $hash = password_hash($password, PASSWORD_DEFAULT);
 
-                User::create($name, $email, $password);
-                User::getAll();
+            User::create($name, $email, $hash);
 
-                header('location: /login');
-            }
-            require_once '../View/registrate.phtml';
+            $requestData = User::getOneByLogin($name);
+
+            header('location: /login');
+        }
+        require_once '../View/registrate.phtml';
     }
 
     public function getLogin()
@@ -36,11 +37,12 @@ class UserController
         require_once '../View/login.phtml';
     }
 
-    public function postLogin(LoginRequest $requestData): void
+    public function postLogin(LoginRequest $request): void
     {
-            $errors = $requestData->validate();
+            $errors = $request->validate();
 
             if (empty($errors)) {
+                $requestData = $request->getBody();
                 $login = $requestData['email'];
                 $password = $requestData['psw'];
                 $requestData = User::getOneByLogin($login);
@@ -49,16 +51,16 @@ class UserController
                     $errors['login'] = 'Логин или пароль введен неверно';
                 } else {
                     if (password_verify($password, $requestData->getPassword())) {
-                        //setcookie('user_id', $data['id']);
-                        //Выдаем уникальный идентификатор сессии
+/*                        setcookie('user_id', $data['id']);*/
                         session_start();
                         $_SESSION['user_id'] = $requestData->getId();
                         header('location: /main');
                     } else {
-                        $errors['login'] = 'Логин или пароль введен неверно';
+                        $errors['password'] = 'Логин или пароль введен неверно';
                     }
                 }
-                require_once '../View/login.phtml';
+
             }
+        require_once '../View/login.phtml';
     }
 }
