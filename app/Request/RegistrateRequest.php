@@ -6,7 +6,6 @@ class RegistrateRequest extends Request
     public function validate(): array
     {
         $errors = [];
-        //$data = $this->body;
         if (isset($this->body['name'])) {
             $name = $this->body['name'];
             if (strlen($name) < 2) {
@@ -16,8 +15,7 @@ class RegistrateRequest extends Request
             $errors['name'] = 'Введите имя';
         }
 
-        if (isset($this->body['email']))
-        {
+        if (isset($this->body['email'])) {
             $email = $this->body['email'];
             if (strlen($email) < 4) {
                 $errors['email'] = 'Электронная почта должна содержать больше 4 символов';
@@ -38,7 +36,6 @@ class RegistrateRequest extends Request
         }
 
         if (isset($this->body['psw-repeat'])) {
-            $password = $this->body['psw'];
             $passwordR = $this->body['psw-repeat'];
             if ($password !== $passwordR) {
                 $errors['psw-repeat'] = 'Пароль не совпадает';

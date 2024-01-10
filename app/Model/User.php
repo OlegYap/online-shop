@@ -14,7 +14,6 @@ class User extends Model
         $this->name = $name;
         $this->email = $email;
         $this->password = $password;
-
     }
 
     public function getId(): int

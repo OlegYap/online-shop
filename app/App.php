@@ -1,8 +1,7 @@
 <?php
 
-use Controller\CartController;
-use Controller\MainController;
 use Controller\UserController;
+use Controller\MainController;
 use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
@@ -39,24 +38,24 @@ class App
                 'method' => 'getMainPage',
             ],
             'POST' => [
-                'class' => CartController::class,
+                'class' => UserController::class,
                 'method' => 'postAddProduct',
                 'request' => AddProductRequest::class
             ]
         ],
             '/add-product' => [
                 'GET' => [
-                    'class' => CartController::class,
+                    'class' => UserController::class,
                     'method' => 'getAddProduct'
                 ],
                 'POST' => [
-                    'class' => CartController::class,
+                    'class' => UserController::class,
                     'method' => 'postAddProduct',
                     'request' => AddProductRequest::class
                 ],
            '/cart' => [
                 'GET' => [
-                    'class' => CartController::class,
+                    'class' => UserController::class,
                     'method' => 'getCartPage'
                 ]
            ]

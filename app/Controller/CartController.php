@@ -36,6 +36,7 @@ class CartController
     }
 // Как работают сессий и куки
     public function getCartPage(): void
+
     {
         session_start();
         if (isset($_SESSION['user_id'])) {
