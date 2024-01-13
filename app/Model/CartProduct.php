@@ -23,11 +23,15 @@ class CartProduct extends Model
         return $stmt->execute(['cart_id' => $cartId, 'product_id' => $productId, 'quantity' => $quantity]);
     }
 
-    public static function getAllByCartId(int $cartId): array
+    public static function getAllByCartId(int $cartId): ?array
     {
         $stmt = self::getPDO()->prepare("SELECT * FROM cart_products WHERE cart_id = :cart_id");
         $stmt->execute(['cart_id' => $cartId]);
         $data = $stmt->fetchAll();
+
+        if (empty($data)) {
+            return null;
+        }
 
         $arr = [];
         foreach ($data as $cartProduct)

@@ -8,7 +8,7 @@ class Request
     protected array $headers;
     protected array $body;
 
-    public function __construct(string $method, array $headers = [], array $body = [])
+    public function __construct(string $method, array $body = [],  array $headers = [])
     {
         $this->method = $method;
         $this->body = $body;

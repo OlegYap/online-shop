@@ -6,7 +6,7 @@ use Model\User;
 
 class UserController
 {
-    public function getRegistrateForm(): void
+    public function getRegistrateForm()
     {
         require_once '../View/registrate.phtml';
     }

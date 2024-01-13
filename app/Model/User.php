@@ -44,8 +44,8 @@ class User extends Model
     public static function getOneByLogin(string $login): User|null
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
-        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE name=:name');
-        $stmt->execute(['name' => $login]);
+        $stmt = self::getPDO()->prepare('SELECT * FROM users WHERE email=:email');
+        $stmt->execute(['email' => $login]);
         $data = $stmt->fetch();
 
         if (empty($data))

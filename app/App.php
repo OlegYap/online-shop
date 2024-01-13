@@ -1,5 +1,6 @@
 <?php
 
+use Controller\CartController;
 use Controller\UserController;
 use Controller\MainController;
 use Request\AddProductRequest;
@@ -42,24 +43,13 @@ class App
                 'method' => 'postAddProduct',
                 'request' => AddProductRequest::class
             ]
-        ],
-            '/add-product' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getAddProduct'
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'postAddProduct',
-                    'request' => AddProductRequest::class
                 ],
            '/cart' => [
                 'GET' => [
-                    'class' => UserController::class,
+                    'class' => CartController::class,
                     'method' => 'getCartPage'
                 ]
            ]
-            ]
     ];
     // Обрабатываем входящие запросы
     public function run(): void
