@@ -8,20 +8,15 @@
     <h3>Cart</h3>
     <div class="card-deck">
         <?php foreach ($products as $product): ?>
-            <div class="card">
-                <form action="" method="POST">
-                    <div class="card-body">
-                        <div class="card-name"><?php echo $product->getName(); ?></div>
-                        <div class="card-price"><?php echo $product->getPrice() . " rub"; ?></div>
-                        <div class="card-price"><?php echo $product->getQuantity(); ?></div>
-                    </div>
-                </form>
-            </div>
+        <div class="card">
+    <div class="card-footer"><?php echo $product->getPrice(); ?></div>
+    <div class="card-footer"><?php echo $product->getQuantity(); ?></div>
+    <div class="card-name"><?php echo $product->getName(); ?></div>
+    </div>
         <?php endforeach; ?>
     </div>
 </div>
 </body>
-</html>
 <style>
     .container {
         display: flex;

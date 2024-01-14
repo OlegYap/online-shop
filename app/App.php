@@ -39,7 +39,7 @@ class App
                 'method' => 'getMainPage',
             ],
             'POST' => [
-                'class' => UserController::class,
+                'class' => CartController::class,
                 'method' => 'postAddProduct',
                 'request' => AddProductRequest::class
             ]

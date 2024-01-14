@@ -28,11 +28,13 @@ class CartController
                     Cart::create($userId);
                     $cart = Cart::getOneByUserId($userId);
                 }
+
                 $cartId = $cart->getId();
                 CartProduct::create($cartId, $productId, $quantity);
-/*                header('location: /main');*/
+                header('location: /main');
+            } else {
+                header('location: /login');
             }
-            require_once '../View/main.phtml';
         }
     }
     public function getCartPage(): void
@@ -49,7 +51,7 @@ class CartController
                     $productIds = [];
 
                     foreach ($cartProducts as $cartProduct) {
-                        $productIds = $cartProduct->getProductsId();
+                        $productIds = $cartProduct->getProductId();
                     }
                     $products = Product::getByIds($productIds);
                     require_once '../View/cart.phtml';

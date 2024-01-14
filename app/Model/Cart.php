@@ -43,7 +43,7 @@ class Cart extends Model
             return null;
         }
 
-        return new self($data['userId'], $data['id'], $data['name']);
+        return new self($data['id'], $data['name'], $data['userId']);
     }
 
 

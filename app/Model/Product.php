@@ -30,16 +30,20 @@ class Product extends Model
     }
 
 
-    public static function getByIds(array $ids): array
+    public static function getByIds(array $ids): array|null
     {
         $placeholders = implode(', ', array_fill(0, count($ids), '?'));
         $stmt = self::getPDO()->prepare("SELECT * FROM products WHERE id IN ($placeholders)");
         $stmt->execute($ids);
         $data = $stmt->fetchAll();
 
+        if (empty($data)){
+            return null;
+        }
+
         $products = [];
         foreach ($data as $product) {
-            $products[] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+            $products[$product['id']] = new self($product['id'], $product['name'], $product['price'], $product['description']);
         }
         return $products;
     }
