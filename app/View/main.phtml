@@ -20,11 +20,17 @@
                         <p class="card-text"><?php echo $product->getName(); ?> </p>
                         <div class="text"><?php echo $product->getDescription();?></div>
                         <label>
-                            <input type="hidden" placeholder="product-id" name="product-id" value="<?php echo $product->getId();?>">
+                            <input type="text" placeholder="Введите product-id" name="product_id" value="<?php echo $product->getId();?>">
                         </label>
+                        <?php if (isset($errors['product_id'])): ?>
+                            <label style="color: red"><?php echo $errors['product_id'];?></label>
+                        <?php endif; ?>
                         <label>
-                            <input type="text" placeholder="quantity" name="quantity" required>
+                            <input type="text" placeholder="Введите количество продукта" name="quantity" required>
                         </label>
+                        <?php if (isset($errors['quantity'])): ?>
+                            <label style="color: red"><?php echo $errors['quantity'];?></label>
+                        <?php endif; ?>
                         <div class="card-footer">
                             <?php echo $product->getPrice() . " rub"; ?>
                         </div>

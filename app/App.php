@@ -1,10 +1,12 @@
 <?php
 
 use Controller\CartController;
+use Controller\OrderController;
 use Controller\UserController;
 use Controller\MainController;
 use Request\AddProductRequest;
 use Request\LoginRequest;
+use Request\OrderRequest;
 use Request\RegistrateRequest;
 use Request\Request;
 
@@ -49,7 +51,18 @@ class App
                     'class' => CartController::class,
                     'method' => 'getCartPage'
                 ]
-           ]
+           ],
+        '/order' => [
+            'GET' => [
+                'class' => OrderController::class,
+                'method' => 'getOrder',
+            ],
+            'POST' => [
+                'class' => CartController::class,
+                'method' => 'postOrder',
+                'request' => OrderRequest::class
+            ]
+        ]
     ];
     // Обрабатываем входящие запросы
     public function run(): void

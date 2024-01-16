@@ -17,9 +17,9 @@ class CartController
         if (empty($errors)) {
             session_start();
             $requestData = $request->getBody();
-            $productId = $requestData['product-id'];
+            $productId = $requestData['product_id'];
             $quantity = $requestData['quantity'];
-/*            session_start();*/
+
             if (isset($_SESSION['user_id'])) {
                 $userId = $_SESSION['user_id'];
                 $cart = Cart::getOneByUserId($userId);
@@ -28,9 +28,8 @@ class CartController
                     Cart::create($userId);
                     $cart = Cart::getOneByUserId($userId);
                 }
-
-                $cartId = $cart->getId();
-                CartProduct::create($cartId, $productId, $quantity);
+                //$cartId = $cart->getId();
+                CartProduct::create($cart->getId(), $productId, $quantity);
                 header('location: /main');
             } else {
                 header('location: /login');
@@ -51,7 +50,7 @@ class CartController
                     $productIds = [];
 
                     foreach ($cartProducts as $cartProduct) {
-                        $productIds = $cartProduct->getProductId();
+                        $productIds[] = $cartProduct->getProductId();
                     }
                     $products = Product::getByIds($productIds);
                     require_once '../View/cart.phtml';

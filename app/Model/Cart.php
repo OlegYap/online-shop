@@ -35,15 +35,15 @@ class Cart extends Model
     {
         //$pdo = new PDO("pgsql:host=db;dbname=postgres", "dbuser", "dbpwd");
 
-        $stmt = self::getPDO()->prepare(query: 'SELECT * FROM carts WHERE user_id = :userId');
-        $stmt->execute(['userId' => $userId]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = self::getPDO()->prepare(query: 'SELECT * FROM carts WHERE user_id = :user_id');
+        $stmt->execute(['user_id' => $userId]);
+        $data = $stmt->fetch();
 
         if (empty($data)) {
             return null;
         }
 
-        return new self($data['id'], $data['name'], $data['userId']);
+        return new self($data['id'], $data['name'], $data['user_id']); //Исправить здесб на user_id
     }
 
 

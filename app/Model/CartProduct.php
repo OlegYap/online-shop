@@ -36,7 +36,7 @@ class CartProduct extends Model
         $arr = [];
         foreach ($data as $cartProduct)
         {
-            $arr[$data['product-id']] = new self($cartProduct['id'], $cartProduct['cart_id'], $cartProduct['product_id'], $cartProduct['quantity']);
+            $arr[] = new self($cartProduct['id'], $cartProduct['cart_id'], $cartProduct['product_id'], $cartProduct['quantity']);
         }
         return $arr;
     }
