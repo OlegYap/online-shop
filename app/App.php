@@ -32,7 +32,7 @@ class App
                 'POST' => [
                     'class' => UserController::class,
                     'method' => 'postRegistrate',
-                    'request' => RegistrateRequest::class
+/*                    'request' => RegistrateRequest::class*/
                 ]
             ],
         '/main' => [
@@ -55,12 +55,18 @@ class App
         '/order' => [
             'GET' => [
                 'class' => OrderController::class,
-                'method' => 'getOrder',
+                'method' => 'getOrderForm',
             ],
             'POST' => [
-                'class' => CartController::class,
+                'class' => OrderController::class,
                 'method' => 'postOrder',
                 'request' => OrderRequest::class
+            ]
+        ],
+        '/order-product' => [
+            'GET' => [
+                'class' => OrderController::class,
+                'method' => 'getOrder'
             ]
         ]
     ];
@@ -86,7 +92,15 @@ class App
                 }
 
                 $obj = new $class();
-                $obj->$method($request);
+
+                try {
+                    $obj->$method($request);
+                } catch (Throwable $throwable) {
+                    $data = date('D.M.Y. H:i:s') . $throwable->getMessage() . $throwable->getLine() . $throwable->getFile();
+                    file_put_contents('../Storage/logs/error.txt', $data, FILE_APPEND);
+                    require_once '../View/error500.html';
+                }
+
             } else {
                 echo "Метод $requestMethod для $requestUri не поддерживается";
             }

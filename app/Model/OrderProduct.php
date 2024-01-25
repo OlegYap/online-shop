@@ -19,18 +19,20 @@ class OrderProduct extends Model
         $this->price = $price;
     }
 
-    public function create(int $id, int $orderId, int $productId, int $quantity, float $price): array|bool
+    public static function create(int $orderId, array $cartProducts, array $prices): void
     {
-        $stmt = self::getPDO()->prepare('INSERT INTO order_products (order_id, product_id, quantity, price) VALUES (:order_id, :product_id, :quantity, :price)');
-        return $stmt->execute();
+        foreach ($cartProducts as $cartProduct) {
+            $stmt = self::getPDO()->prepare("INSERT INTO order_products (order_id, product_id, quantity, price) VALUES (:order_id, :product_id, :quantity, :price)");
+            $stmt->execute(['order_id' => $orderId, 'product_id' => $cartProduct->getProductId(), 'quantity' => $cartProduct->getQuantity(), 'price' => $prices[$cartProduct->getProductId()]]);
+        }
     }
 
-    public function getAllByOrderId(int $orderId): array|null
+    public static function getAllByOrderId(int $orderId): array|null
     {
         $stmt = self::getPDO()->prepare('SELECT * FROM order_products WHERE order_id = :order_id');
         $stmt->execute(['order_id' => $orderId]);
 
-        $data = $stmt->fetch();
+        $data = $stmt->fetchAll();
 
         if (empty($data)){
             return null;

@@ -6,11 +6,6 @@ use Model\Product;
 use Request\AddProductRequest;
 class CartController
 {
-    public function getAddProduct()
-    {
-        require_once '../View/main.phtml';;
-    }
-
     public function postAddProduct(AddProductRequest $request): void
     {
         $errors = $request->validate();

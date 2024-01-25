@@ -21,15 +21,15 @@ class Order extends Model
         $this->address = $address;
     }
 
-    public function create(int $userId, string $name, string $lastName, string $phoneNumber, string $address): array|bool
+    public static function create(int $userId, string $name, string $lastName, string $phoneNumber, string $address): array|bool
     {
-        $stmt = self::getPDO()->prepare('INSERT INTO orders (user_id, name, last_name, phonenumber, address) VALUES (:user_id, :name, :lastname, :phonenumber, :address)');
+        $stmt = self::getPDO()->prepare('INSERT INTO orders (user_id, name, lastname, phonenumber, address) VALUES (:user_id, :name, :lastname, :phonenumber, :address)');
         return $stmt->execute(['user_id' => $userId, 'name' => $name, 'lastname' => $lastName, 'phonenumber' =>$phoneNumber,'address' => $address ]);
     }
 
-    public function getOneByUserId($userId): Order|null
+    public static function getOneByUserId(int $userId): Order|null
     {
-        $stmt = self::getPDO()->prepare('SELECT * FROM order WHERE user_id = :user_id');
+        $stmt = self::getPDO()->prepare('SELECT * FROM orders WHERE user_id = :user_id');
         $stmt->execute(['user_id' => $userId]);
 
         $data = $stmt->fetch();

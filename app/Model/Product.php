@@ -35,17 +35,18 @@ class Product extends Model
         $placeholders = implode(', ', array_fill(0, count($ids), '?'));
         $stmt = self::getPDO()->prepare("SELECT * FROM products WHERE id IN ($placeholders)");
         $stmt->execute($ids);
+
         $data = $stmt->fetchAll();
 
         if (empty($data)){
             return null;
         }
 
-        $products = [];
+        $arr = [];
         foreach ($data as $product) {
-            $products[$product['id']] = new self($product['id'], $product['name'], $product['price'], $product['description']);
+            $arr[$product['id']] = new self($product['id'], $product['name'], $product['price'], $product['description']);
         }
-        return $products;
+        return $arr;
     }
 
     public function getId(): int

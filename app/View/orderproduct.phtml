@@ -1,0 +1,28 @@
+<body>
+<div class="container">
+    <h1>ЗАКАЗ № <?php echo $order->getId(); ?></h1>
+    <hr>
+    <div><?php echo  $order->getLastName() . ' , ' . $order->getName(); ?></div>
+    <div><?php echo  $order->getPhoneNumber(); ?></div>
+    <div><?php echo  $order->getAddress(); ?></div>
+    <hr>
+    <div <?php $sum = 0; ?></div>
+<?php foreach ($products as $product): ?>
+    <div class="card-details">
+        <div class="card-name"><?php echo ucfirst($product->getName()); ?></div>
+        <div class="card-price"><?php echo $product->getPrice() . " руб"; ?></div>
+        <div class="card-wheel">
+            <span> <?php $quantity = $orderProducts[$product->getId()]->getQuantity(); echo $quantity . " шт"; ?></span>
+        </div>
+    </div>
+    <div <?php $sum += $product->getPrice()*$quantity; ?></div>
+<?php endforeach; ?>
+<div class="checkout-total">
+    <h6>Итого к оплате </h6>
+    <p><?php echo $sum ." руб"; ?></p><a href="">
+</div>
+<div>
+    <a href="/main-page"><button type="submit" class="btn">Подтвердить заказ </button>
+        <a href="/order"><button type="submit" class="btn"> Назад </button>
+</div>
+</body>

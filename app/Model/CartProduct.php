@@ -36,10 +36,36 @@ class CartProduct extends Model
         $arr = [];
         foreach ($data as $cartProduct)
         {
-            $arr[] = new self($cartProduct['id'], $cartProduct['cart_id'], $cartProduct['product_id'], $cartProduct['quantity']);
+            $arr[$cartProduct['product_id']] = new self($cartProduct['id'], $cartProduct['cart_id'], $cartProduct['product_id'], $cartProduct['quantity']);
         }
         return $arr;
     }
+
+
+    public static function getAllByUserId(int $userId): array|null
+    {
+        $stmt = self::getPDO()->prepare("SELECT * FROM cart_products INNER JOIN carts ON cart_products.cart_id = carts.id WHERE user_id=:user_id ");
+        $stmt->execute(['user_id' => $userId]);
+
+        $data = $stmt->fetchAll();
+
+        if (empty($data)) {
+            return null;
+        }
+
+        $arr = [];
+        foreach ($data as $obj) {
+            $arr[$obj['product_id']] = new self($obj['id'], $obj['cart_id'], $obj['product_id'], $obj['quantity']);
+        }
+        return $arr;
+    }
+
+    public static function clear(int $cartId): void
+    {
+        $stmt = self::getPDO()->prepare("DELETE FROM cart_products WHERE cart_id=:cart_id");
+        $stmt->execute(['cart_id' => $cartId]);
+    }
+
 
     public function getId(): int
     {

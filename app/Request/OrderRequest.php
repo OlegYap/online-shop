@@ -11,13 +11,13 @@ class OrderRequest extends Request
             $errors['name'] = 'Введите имя';
         }
         if (empty($this->body['lastname'])) {
-            $errors['quantity'] = 'Введите фамилию';
+            $errors['lastname'] = 'Введите фамилию';
         }
         if (empty($this->body['phonenumber'])) {
-            $errors['quantity'] = 'Введите номер телефона';
+            $errors['phonenumber'] = 'Введите номер телефона';
         }
         if (empty($this->body['address'])) {
-            $errors['quantity'] = 'Введите адрес проживания';
+            $errors['address'] = 'Введите адрес проживания';
         }
         return $errors;
     }

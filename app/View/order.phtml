@@ -1,0 +1,31 @@
+<body>
+<form action="" method="POST">
+    <label for="name"><b>Имя</b></label>
+    <?php if (isset($errors['name'])): ?>
+        <label style="color: red"><?php echo $errors['name']; ?></label>
+    <?php endif; ?>
+    <input type="text" placeholder="Введите имя" name="name" id="name" required>
+
+    <label for="lastname"><b>Фамилия</b></label>
+    <?php if (isset($errors['lastname'])): ?>
+        <label style="color: red"><?php echo $errors['lastname']; ?></label>
+    <?php endif; ?>
+    <input type="text" placeholder="Введите фамилию" name="lastname" id="lastname" required>
+
+    <label for="phonenumber"><b>Номер телефона</b></label>
+    <?php if (isset($errors['phonenumber'])): ?>
+        <label style="color: red"><?php echo $errors['phonenumber']; ?></label>
+    <?php endif; ?>
+    <input type="text" placeholder="Введите номер телефона" name="phonenumber" id="phonenumber" required>
+
+    <label for="address"><b>Адрес</b></label>
+    <?php if (isset($errors['address'])): ?>
+        <label style="color: red"><?php echo $errors['address']; ?></label>
+    <?php endif; ?>
+    <input type="text" placeholder="Введите свой адрес" name="address" id="address" required>
+    <button type="submit" class="orderbtn">Order</button>
+    </div>
+</form>
+</body>
+<style>
+</style>
