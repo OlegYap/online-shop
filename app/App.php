@@ -1,75 +1,14 @@
 <?php
-
-use Controller\CartController;
-use Controller\OrderController;
-use Controller\UserController;
-use Controller\MainController;
-use Request\AddProductRequest;
-use Request\LoginRequest;
-use Request\OrderRequest;
-use Request\RegistrateRequest;
 use Request\Request;
+use Service\LoggerService;
 
 class App
 {
-    private array $routes = [
-            '/login' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getLogin',
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'postLogin',
-                    'request' => LoginRequest::class
-                ]
-            ],
-            '/registrate' => [
-                'GET' => [
-                    'class' => UserController::class,
-                    'method' => 'getRegistrateForm',
-                ],
-                'POST' => [
-                    'class' => UserController::class,
-                    'method' => 'postRegistrate',
-/*                    'request' => RegistrateRequest::class*/
-                ]
-            ],
-        '/main' => [
-            'GET' => [
-                'class' => MainController::class,
-                'method' => 'getMainPage',
-            ],
-            'POST' => [
-                'class' => CartController::class,
-                'method' => 'postAddProduct',
-                'request' => AddProductRequest::class
-            ]
-                ],
-           '/cart' => [
-                'GET' => [
-                    'class' => CartController::class,
-                    'method' => 'getCartPage'
-                ]
-           ],
-        '/order' => [
-            'GET' => [
-                'class' => OrderController::class,
-                'method' => 'getOrderForm',
-            ],
-            'POST' => [
-                'class' => OrderController::class,
-                'method' => 'postOrder',
-                'request' => OrderRequest::class
-            ]
-        ],
-        '/order-product' => [
-            'GET' => [
-                'class' => OrderController::class,
-                'method' => 'getOrder'
-            ]
-        ]
-    ];
+    private Container $container;
+    private LoggerService $loggerService;
+    private array $routes = [];
+
+
     // Обрабатываем входящие запросы
     public function run(): void
     {
@@ -83,7 +22,8 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
 
-                // Проверка на наличие ключа "request"
+                $obj = $this->container->get($class);
+
                 if (isset($handler['request'])) {
                     $requestClass = $handler['request'];
                     $request = new $requestClass($requestMethod, $_POST);
@@ -91,13 +31,10 @@ class App
                     $request = new Request($requestMethod, $_POST);
                 }
 
-                $obj = new $class();
-
                 try {
                     $obj->$method($request);
-                } catch (Throwable $throwable) {
-                    $data = date('D.M.Y. H:i:s') . $throwable->getMessage() . $throwable->getLine() . $throwable->getFile();
-                    file_put_contents('../Storage/logs/error.txt', $data, FILE_APPEND);
+                } catch (Error $error) {
+                    $this->loggerService->error($error);
                     require_once '../View/error500.html';
                 }
 
@@ -105,5 +42,50 @@ class App
                 echo "Метод $requestMethod для $requestUri не поддерживается";
             }
         }
+    }
+    public function get(string $name, string $className, string $method, string $request = null): void
+    {
+        $this->routes[$name]['GET'] =
+            [
+                'class' => $className,
+                'method' => $method,
+                'request' => $request,
+            ];
+    }
+
+    public function post(string $name, string $className, string $method, string $request = null): void
+    {
+        $this->routes[$name]['POST'] =
+            [
+                'class' => $className,
+                'method' => $method,
+                'request' => $request,
+            ];
+    }
+
+    public function put(string $name, string $className, string $method, string $request = null): void
+    {
+        $this->routes[$name]['PUT'] =
+            [
+                'class' => $className,
+                'method' => $method,
+                'request' => $request,
+            ];
+    }
+
+    public function patch(string $name, string $className, string $method, string $request = null): void
+    {
+        $this->routes[$name]['PATCH'] =
+            [
+                'class' => $className,
+                'method' => $method,
+                'request' => $request,
+            ];
+    }
+
+    public function setContainer(Container $container): void
+    {
+        $this->container = $container;
+        $this->LoggerService = $container->get(LoggerService::class);
     }
 }

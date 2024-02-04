@@ -3,9 +3,17 @@ namespace Controller;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
 use Model\User;
+use Service\Authentication\AuthenticationInterface;
 
 class UserController
 {
+    private AuthenticationInterface $authenticationService;
+
+    public function __construct(AuthenticationInterface $authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
+    }
+
     public function getRegistrateForm()
     {
         require_once '../View/registrate.phtml';
@@ -41,22 +49,11 @@ class UserController
             $requestData = $request->getBody();
             $login = $requestData['email'];
             $password = $requestData['psw'];
-
-            $requestData = User::getOneByLogin($login);
-
-            if (empty($requestData)) {
-                $errors['login'] = 'Логин или пароль введен неверно';
-            } else {
-                if (password_verify($password, $requestData->getPassword())) {
-                    /* setcookie('user_id', $data['id']);*/
-                    session_start();
-                    $_SESSION['user_id'] = $requestData->getId();
-                    header('location: /main');
-                } else {
-                    $errors['password'] = 'Логин или пароль введен неверно';
-                }
+            $result = $this->authenticationService->login($login,$password);
+            if ($result) {
+                header('location: /main');
             }
-
+            $errors['email'] = 'Неправильный логин или пароль';
         }
         require_once '../View/login.phtml';
     }

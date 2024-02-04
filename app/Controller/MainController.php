@@ -1,17 +1,24 @@
 <?php
 namespace Controller;
 use Model\Product;
+use Service\Authentication\AuthenticationInterface;
+use Service\Authentication\SessionAuthenticationService;
 
 class MainController
 {
+    private AuthenticationInterface $authenticationService;
+
+    public function __construct(AuthenticationInterface $authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
+    }
     public function getMainPage(): void
     {
-        session_start();
-        if (isset($_SESSION['user_id'])) {
-            $products = Product::getAll();
-        } else {
+        $user = $this->authenticationService->getCurrentUser();
+        if (empty($user)) {
             header('location: /login');
         }
+        $products = Product::getAll();
         require_once '../View/main.phtml';
     }
 }
