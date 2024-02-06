@@ -37,7 +37,6 @@ class App
                     $this->loggerService->error($error);
                     require_once '../View/error500.html';
                 }
-
             } else {
                 echo "Метод $requestMethod для $requestUri не поддерживается";
             }
@@ -86,6 +85,6 @@ class App
     public function setContainer(Container $container): void
     {
         $this->container = $container;
-        $this->LoggerService = $container->get(LoggerService::class);
+        $this->loggerService = $container->get(LoggerService::class);
     }
 }

@@ -21,7 +21,7 @@ function  routes(App $app, $container): App
 
 
     $app->get('/main', MainController::class, 'getMainPage');
-    $app->post('/main', CartController::class, 'postAddProduct', AddProductRequest::class);
+    $app->post('/add-product', CartController::class, 'postAddProduct', AddProductRequest::class);
 
     $app->get('/cart', CartController::class, 'getCartPage');
 
