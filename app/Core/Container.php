@@ -1,5 +1,6 @@
 <?php
 
+namespace Core;
 class Container
 {
     private array $services;
@@ -11,7 +12,7 @@ class Container
 
     public function get(string $classname): object
     {
-        if (!isset($this->services[$classname])){
+        if (!isset($this->services[$classname])) {
             return new $classname;
         }
 

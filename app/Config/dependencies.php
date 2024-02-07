@@ -4,6 +4,7 @@ use Controller\CartController;
 use Controller\MainController;
 use Controller\OrderController;
 use Controller\UserController;
+use Core\Container;
 use Service\Authentication\AuthenticationInterface;
 use Service\Authentication\SessionAuthenticationService;
 use Service\OrderService;

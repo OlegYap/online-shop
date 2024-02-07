@@ -2,9 +2,9 @@
 
 namespace Service;
 
+use Core\Model;
 use Model\Cart;
 use Model\CartProduct;
-use Model\Model;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;

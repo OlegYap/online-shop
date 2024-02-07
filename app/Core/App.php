@@ -1,4 +1,8 @@
 <?php
+
+namespace Core;
+
+use Model\Error;
 use Request\Request;
 use Service\LoggerService;
 
@@ -42,6 +46,7 @@ class App
             }
         }
     }
+
     public function get(string $name, string $className, string $method, string $request = null): void
     {
         $this->routes[$name]['GET'] =

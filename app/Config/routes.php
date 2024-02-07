@@ -4,6 +4,7 @@ use Controller\CartController;
 use Controller\MainController;
 use Controller\OrderController;
 use Controller\UserController;
+use Core\App;
 use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\OrderRequest;

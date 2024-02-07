@@ -1,6 +1,8 @@
 <?php
 namespace Model;
 
+use Core\Model;
+
 class User extends Model
 {
     private int $id;

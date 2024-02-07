@@ -1,16 +1,8 @@
 <?php
 
-use Controller\CartController;
-use Controller\MainController;
-use Controller\OrderController;
-use Controller\UserController;
-use Request\AddProductRequest;
-use Request\LoginRequest;
-use Request\OrderRequest;
-use Request\RegistrateRequest;
-use Service\Authentication\AuthenticationInterface;
-use Service\Authentication\SessionAuthenticationService;
-use Service\OrderService;
+use Core\App;
+use Core\Autoloader;
+use Core\Container;
 
 require_once '../Autoloader.php';
 Autoloader::registrate(dirname(__DIR__));

@@ -1,6 +1,6 @@
 <?php
 namespace Model;
-use PDO;
+use Core\Model;
 
 class Cart extends Model
 {

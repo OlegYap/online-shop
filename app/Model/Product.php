@@ -1,6 +1,8 @@
 <?php
 namespace Model;
 
+use Core\Model;
+
 class Product extends Model
 {
     private int $id;
